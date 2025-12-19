@@ -1,0 +1,1265 @@
+/* Main Content */
+.mainContent {
+  margin-left: 70px;
+}
+
+/* Hero Section */
+.hero {
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-ink);
+  z-index: 50;
+  animation: curtainReveal 1s ease-out 0.2s forwards;
+}
+
+@keyframes curtainReveal {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
+}
+
+.heroBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.heroBackground img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: brightness(0.85);
+}
+
+.heroBackground::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg,
+    rgba(13,13,13,0) 0%,
+    rgba(13,13,13,0.1) 40%,
+    rgba(13,13,13,0.7) 75%,
+    rgba(13,13,13,0.95) 100%
+  );
+}
+
+.navStrip {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 3rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logoIcon {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 5;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 3rem 2.5rem;
+}
+
+.headlineWrapper {
+  position: relative;
+}
+
+.fellowshipBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-teal);
+  color: var(--color-surface);
+  padding: 0.5rem 1rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.5s ease-out 1.2s forwards;
+}
+
+.fellowshipBadge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--color-sun);
+  border-radius: 50%;
+}
+
+.headline {
+  font-family: var(--font-anton), sans-serif;
+  font-size: clamp(3rem, 8vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: var(--color-surface);
+  text-transform: uppercase;
+}
+
+.headline :global(.line) {
+  display: block;
+}
+
+.headline :global(.line.highlight .letter) {
+  color: var(--color-sun);
+}
+
+.headline :global(.letter) {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.headline :global(.letter.visible) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.headline :global(.space) {
+  display: inline-block;
+  width: 0.25em;
+}
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.headlineUnderline {
+  width: 80px;
+  height: 4px;
+  background: var(--color-coral);
+  margin-top: 1.5rem;
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: lineReveal 0.5s ease-out 1.9s forwards;
+}
+
+@keyframes lineReveal {
+  to { opacity: 1; transform: scaleX(1); }
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.5s ease-out 2s forwards;
+}
+
+.btnPrimary {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  padding: 1.1rem 2.2rem;
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btnPrimary:hover {
+  background: var(--color-teal);
+  color: var(--color-surface);
+  transform: translateY(-2px);
+}
+
+.btnOutline {
+  background: transparent;
+  color: var(--color-surface);
+  padding: 1.1rem 2.2rem;
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 2px solid var(--color-surface);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btnOutline:hover {
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.bottomStrip {
+  position: relative;
+  z-index: 10;
+  padding: 1rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  background: var(--color-base);
+}
+
+.bottomStrip::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-teal) 0%, var(--color-coral) 50%, var(--color-sun) 100%);
+}
+
+.location {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  color: var(--color-surface);
+}
+
+.socialLinks {
+  display: flex;
+  gap: 2rem;
+}
+
+.socialLinks a {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-surface);
+  text-decoration: none;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.socialLinks a:hover {
+  opacity: 1;
+  color: var(--color-coral);
+}
+
+/* Story Section */
+.story {
+  background: var(--color-base);
+  height: 100vh;
+  min-height: 100vh;
+  position: relative;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.storyBackground {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 45%;
+  height: 70%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.storyBackground img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: grayscale(100%) brightness(0.35);
+  opacity: 0.5;
+  mask-image: linear-gradient(to left, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 70%),
+              linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 80%);
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 70%),
+                      linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 80%);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+
+.storyContainer {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.storyHeading {
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+.storyHeading :global(.word) {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.storyHeading :global(.char) {
+  display: inline-block;
+  color: var(--color-surface);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.storyHeading :global(.char.revealed) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.storyHeading :global(.space) {
+  display: inline;
+}
+
+/* Converge Section */
+.convergeWrapper {
+  height: 600vh;
+  position: relative;
+}
+
+.convergeSection {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  background: var(--color-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding-top: 5vh;
+}
+
+.convergeTextContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.convergeLine {
+  position: absolute;
+  font-family: var(--font-anton), sans-serif;
+  font-size: clamp(6rem, 22vw, 18rem);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--color-surface);
+  white-space: nowrap;
+  will-change: transform;
+  padding: 0.05em 0.2em;
+  background: var(--color-base);
+}
+
+.line2 {
+  z-index: 10;
+}
+
+.quoteCard {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5rem;
+  padding: 4rem;
+  will-change: transform, opacity;
+}
+
+.polaroid {
+  background: #f5f5f0;
+  padding: 1rem;
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.3),
+    0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.polaroidInner {
+  position: relative;
+}
+
+.polaroid img {
+  width: 280px;
+  height: 350px;
+  object-fit: cover;
+  display: block;
+}
+
+.quoteContent {
+  max-width: 550px;
+  position: relative;
+}
+
+.quoteMark {
+  font-family: var(--font-anton), sans-serif;
+  font-size: 15rem;
+  line-height: 0.7;
+  color: var(--color-surface);
+  opacity: 0.15;
+  position: absolute;
+  top: -2rem;
+  left: -3rem;
+}
+
+.quoteText {
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: clamp(1.3rem, 2vw, 1.8rem);
+  font-weight: 500;
+  line-height: 1.6;
+  position: relative;
+  z-index: 2;
+  color: var(--color-surface);
+}
+
+.attribution {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--color-surface);
+  display: inline-block;
+}
+
+.names {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-surface);
+}
+
+.role {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-top: 0.25rem;
+  color: var(--color-surface);
+}
+
+.bioCard {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  max-width: 1200px;
+  padding: 0 4rem;
+  will-change: transform, opacity;
+}
+
+.bioTextCol {
+  flex: 1;
+}
+
+.bioName {
+  font-family: var(--font-anton), sans-serif;
+  font-size: clamp(4rem, 10vw, 9rem);
+  text-transform: uppercase;
+  color: var(--color-surface);
+  line-height: 0.9;
+  margin-bottom: 0.75rem;
+}
+
+.bioName span {
+  display: block;
+  margin-left: 1rem;
+}
+
+.bioTitle {
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 2rem;
+}
+
+.bioText {
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  line-height: 1.8;
+  color: var(--color-surface);
+  max-width: 500px;
+}
+
+.bioLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: clamp(1rem, 1.2vw, 1.1rem);
+  font-weight: 500;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: color 0.3s ease, gap 0.3s ease;
+}
+
+.bioLink:hover {
+  color: var(--color-surface);
+  gap: 0.75rem;
+}
+
+.bioLink::after {
+  content: '→';
+  font-size: 1.2em;
+  transition: transform 0.3s ease;
+}
+
+.bioLink:hover::after {
+  transform: translateX(4px);
+}
+
+.bioImageCol {
+  flex: 0 0 auto;
+}
+
+.bioImageCol .polaroid img {
+  width: 320px;
+  height: 400px;
+  object-fit: cover;
+}
+
+/* Puzzle Quote Section */
+.puzzleWrapper {
+  height: 125vh;
+  position: relative;
+}
+
+.concept3 {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  background: var(--color-base);
+  display: flex;
+  align-items: center;
+  padding: 4rem 6rem;
+  overflow: hidden;
+}
+
+.concept3Inner {
+  max-width: 1400px;
+  width: 100%;
+  position: relative;
+}
+
+.bigQuoteMark {
+  font-family: var(--font-anton), sans-serif;
+  font-size: clamp(20rem, 40vw, 35rem);
+  line-height: 0.5;
+  color: var(--color-surface);
+  opacity: 0.06;
+  position: absolute;
+  bottom: -5rem;
+  right: -5rem;
+  pointer-events: none;
+}
+
+.preQuote {
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: clamp(1rem, 1.5vw, 1.3rem);
+  font-style: italic;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.mainQuote {
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--color-surface);
+  position: relative;
+  z-index: 2;
+  margin-bottom: 3rem;
+  max-width: 1200px;
+}
+
+.mainQuote :global(em) {
+  font-style: italic;
+  color: var(--color-sun);
+}
+
+.quoteAttribution {
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  font-weight: 400;
+  color: rgba(255,255,255,0.8);
+  margin-top: 2rem;
+}
+
+.concept3 :global(.char) {
+  opacity: 0.15;
+  transition: opacity 0.1s ease;
+  display: inline;
+}
+
+.concept3 :global(.char.revealed) {
+  opacity: 1;
+}
+
+.concept3 :global(.char.emphasis) {
+  color: var(--color-sun);
+  font-style: italic;
+}
+
+.fadeElement {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.fadeElement.visible {
+  opacity: 1;
+}
+
+/* Fellowship Details Section */
+.fellowshipDetails {
+  min-height: 100vh;
+  background: var(--color-base);
+  display: flex;
+  align-items: flex-start;
+  padding: 6rem;
+  padding-top: 8rem;
+  transition: background 0.3s ease;
+}
+
+.fellowshipDetails:global(.colorShift) {
+  background: var(--color-teal);
+}
+
+.fellowshipContent {
+  max-width: 1400px;
+  width: 100%;
+  position: relative;
+}
+
+.fellowshipHeadings {
+  position: relative;
+}
+
+.fellowshipHeadings :global(.fellowship-heading) {
+  font-family: var(--font-anton), sans-serif;
+  font-size: clamp(4rem, 12vw, 12rem);
+  text-transform: uppercase;
+  color: var(--color-surface);
+  text-align: left;
+  line-height: 0.95;
+  margin-bottom: 0;
+}
+
+.fellowshipHeadings :global(.fellowship-heading-2) {
+  margin-bottom: 0;
+}
+
+.fellowshipHeadings :global(.fellowship-heading .letter) {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fellowshipHeadings :global(.fellowship-heading .letter.visible) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fellowshipHeadings :global(.fellowship-heading .space) {
+  display: inline-block;
+  width: 0.3em;
+}
+
+.fellowshipTextContainer {
+  max-width: 500px;
+  margin-top: 4rem;
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  line-height: 1.8;
+  color: rgba(255,255,255,0.8);
+  will-change: transform;
+}
+
+.fellowshipTextContainer :global(.text-line) {
+  display: inline;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fellowshipTextContainer :global(.text-line.visible) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fellowshipBottomRow {
+  position: relative;
+  margin-top: 0;
+}
+
+.fellowshipImage {
+  position: absolute;
+  right: 22.5%;
+  top: -8rem;
+  will-change: transform, clip-path;
+  clip-path: inset(50% 50% 50% 50%);
+  transition: clip-path 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.fellowshipImage:global(.visible) {
+  clip-path: inset(0% 0% 0% 0%);
+}
+
+.fellowshipImage .polaroid {
+  transition: transform 0.4s ease;
+}
+
+.fellowshipImage .polaroid:hover {
+  transform: scale(1.02);
+}
+
+.fellowshipImage .polaroid img {
+  width: 360px;
+  height: 464px;
+  object-fit: cover;
+  filter: grayscale(100%);
+  transition: filter 0.4s ease;
+}
+
+.fellowshipImage .polaroid:hover img {
+  filter: grayscale(0%);
+}
+
+/* Beliefs Section */
+.beliefsSection {
+  min-height: 100vh;
+  background: var(--color-base);
+  display: flex;
+  align-items: flex-start;
+  padding: 6rem;
+  padding-top: calc(12rem + 200px);
+  transition: background 0.3s ease;
+}
+
+.beliefsSection:global(.colorShift) {
+  background: var(--color-teal);
+}
+
+.beliefsSection:global(.colorShift) .beliefsHeading :global(.letter) {
+  color: var(--color-sun);
+}
+
+.beliefsContent {
+  max-width: 1400px;
+  width: 100%;
+  position: relative;
+}
+
+.beliefsHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.beliefsHeading {
+  font-family: var(--font-anton), sans-serif;
+  font-size: clamp(8rem, 20vw, 20rem);
+  text-transform: uppercase;
+  color: var(--color-surface);
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+}
+
+.beliefsHeading :global(.letter) {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease;
+}
+
+.beliefsHeading :global(.letter.visible) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.topicsList {
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.topicItem {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.topicItem:global(.visible) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.topicTitle {
+  font-family: var(--font-anton), sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  text-transform: uppercase;
+  color: var(--color-surface);
+  margin-bottom: 0.25rem;
+}
+
+.topicPresenter {
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+  color: rgba(255,255,255,0.6);
+}
+
+.topicItem.highlight {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--color-surface);
+  width: 100%;
+  max-width: 800px;
+}
+
+.topicItem.highlight .topicTitle {
+  color: var(--color-sun);
+}
+
+.topicItem.highlight .topicPresenter {
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  color: rgba(255,255,255,0.8);
+  max-width: 700px;
+  line-height: 1.7;
+}
+
+.highlightContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.applyCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 2.5rem;
+  background: var(--color-sun);
+  color: var(--color-base);
+  font-family: var(--font-anton), sans-serif;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease;
+}
+
+.applyCta:hover {
+  background: var(--color-surface);
+  color: var(--color-base);
+  transform: scale(1.02);
+}
+
+.applyCta::after {
+  content: '→';
+  font-size: 1.2em;
+  transition: transform 0.3s ease;
+}
+
+.applyCta:hover::after {
+  transform: translateX(4px);
+}
+
+/* Footer */
+.siteFooter {
+  background: var(--color-base);
+  padding: 4rem 6rem 2rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  transition: background 0.3s ease;
+}
+
+.siteFooter:global(.colorShift) {
+  background: var(--color-teal);
+}
+
+.footerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.footerLeft {
+  /* Empty for now */
+}
+
+.footerTitle {
+  font-family: var(--font-anton), sans-serif;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  color: var(--color-surface);
+  letter-spacing: 0.05em;
+}
+
+.footerRight {
+  /* Empty for now */
+}
+
+.footerContact {
+  /* Empty for now */
+}
+
+.footerHeading {
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-surface);
+  margin-bottom: 0.5rem;
+}
+
+.footerEmail {
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footerEmail:hover {
+  color: var(--color-surface);
+}
+
+.footerBottom {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: 2rem;
+}
+
+.footerCopyright {
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .mainContent {
+    margin-left: 60px;
+  }
+
+  .heroContent {
+    padding: 0 2rem 2rem;
+  }
+
+  .story {
+    padding: 2rem;
+  }
+
+  .convergeLine {
+    font-size: clamp(4rem, 15vw, 12rem);
+  }
+
+  .quoteCard {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem;
+  }
+
+  .bioCard {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 0 2rem;
+  }
+
+  .bioName {
+    font-size: clamp(3rem, 8vw, 6rem);
+  }
+
+  .concept3 {
+    padding: 3rem 4rem;
+  }
+
+  .fellowshipDetails {
+    padding: 4rem;
+  }
+
+  .fellowshipImage {
+    right: 10%;
+  }
+
+  .beliefsSection {
+    padding: 4rem;
+    padding-top: calc(8rem + 150px);
+  }
+
+  .siteFooter {
+    padding: 3rem 4rem 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    margin-left: 50px;
+  }
+
+  .heroContent {
+    padding: 0 1.5rem 1.5rem;
+  }
+
+  .headline {
+    font-size: clamp(2rem, 10vw, 4rem);
+  }
+
+  .fellowshipBadge {
+    font-size: 0.6rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .ctaButtons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .btnPrimary,
+  .btnOutline {
+    padding: 0.9rem 1.5rem;
+    font-size: 0.75rem;
+    text-align: center;
+  }
+
+  .bottomStrip {
+    padding: 0.75rem 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .socialLinks {
+    gap: 1rem;
+  }
+
+  .navStrip {
+    padding: 1rem 1.5rem;
+  }
+
+  .logoIcon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .story {
+    padding: 1.5rem;
+  }
+
+  .storyHeading {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+  }
+
+  .convergeLine {
+    font-size: clamp(2.5rem, 12vw, 8rem);
+  }
+
+  .quoteCard {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .polaroid img {
+    width: 200px;
+    height: 250px;
+  }
+
+  .quoteMark {
+    font-size: 8rem;
+    top: -1rem;
+    left: -1rem;
+  }
+
+  .quoteText {
+    font-size: 1.1rem;
+  }
+
+  .bioCard {
+    flex-direction: column-reverse;
+    gap: 1.5rem;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+
+  .bioName {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+  }
+
+  .bioName span {
+    margin-left: 0;
+  }
+
+  .bioText {
+    font-size: 1rem;
+    max-width: 100%;
+  }
+
+  .bioImageCol .polaroid img {
+    width: 220px;
+    height: 280px;
+  }
+
+  .concept3 {
+    padding: 2rem 1.5rem;
+  }
+
+  .mainQuote {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+  }
+
+  .bigQuoteMark {
+    font-size: clamp(10rem, 30vw, 20rem);
+    right: -2rem;
+    bottom: -2rem;
+  }
+
+  .fellowshipDetails {
+    padding: 3rem 1.5rem;
+    padding-top: 5rem;
+  }
+
+  .fellowshipHeadings :global(.fellowship-heading) {
+    font-size: clamp(3rem, 12vw, 8rem);
+  }
+
+  .fellowshipTextContainer {
+    max-width: 100%;
+    margin-top: 2rem;
+    font-size: 1rem;
+  }
+
+  .fellowshipImage {
+    position: relative;
+    right: auto;
+    top: auto;
+    margin-top: 2rem;
+  }
+
+  .fellowshipImage .polaroid img {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    aspect-ratio: 360/464;
+  }
+
+  .beliefsSection {
+    padding: 3rem 1.5rem;
+    padding-top: calc(4rem + 100px);
+  }
+
+  .beliefsHeading {
+    font-size: clamp(4rem, 15vw, 10rem);
+  }
+
+  .topicsList {
+    margin-top: 2rem;
+    gap: 1.5rem;
+  }
+
+  .topicTitle {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+  }
+
+  .topicItem.highlight {
+    padding: 1.5rem 1rem;
+  }
+
+  .applyCta {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+
+  .siteFooter {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
+  .footerContent {
+    flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .footerTitle {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mainContent {
+    margin-left: 45px;
+  }
+
+  .headline {
+    font-size: clamp(1.8rem, 9vw, 3rem);
+  }
+
+  .convergeLine {
+    font-size: clamp(2rem, 10vw, 5rem);
+  }
+
+  .polaroid img {
+    width: 180px;
+    height: 225px;
+  }
+
+  .bioImageCol .polaroid img {
+    width: 180px;
+    height: 225px;
+  }
+
+  .fellowshipHeadings :global(.fellowship-heading) {
+    font-size: clamp(2.5rem, 14vw, 5rem);
+  }
+
+  .beliefsHeading {
+    font-size: clamp(3rem, 18vw, 6rem);
+  }
+}
