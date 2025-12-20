@@ -5,7 +5,8 @@ import styles from "./Sidebar.module.css";
 
 export default function Sidebar() {
   const sidebarRef = useRef<HTMLElement>(null);
-  const navItemsRef = useRef<NodeListOf<Element> | null>(null);
+  const navContainerRef = useRef<HTMLDivElement>(null);
+  const navItemsRef = useRef<Element[]>([]);
 
   useEffect(() => {
     const sidebar = sidebarRef.current;
@@ -19,17 +20,38 @@ export default function Sidebar() {
       { id: "beliefs-section", index: 4 },
     ];
 
-    const navItems = sidebar.querySelectorAll(".sidebar-nav-item");
-    navItemsRef.current = navItems;
+    // Get nav items using the ref
+    const navContainer = navContainerRef.current;
+    const navItems = navContainer ? Array.from(navContainer.children) : [];
+    navItemsRef.current = navItems as Element[];
 
     function updateSidebarActive() {
-      const scrollPos = window.scrollY + window.innerHeight / 3;
+      const scrollPos = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const viewportMiddle = scrollPos + windowHeight / 2;
       let activeIndex = 0;
+      let maxVisibleArea = 0;
 
       sections.forEach((section, i) => {
         const el = document.getElementById(section.id);
-        if (el && el.offsetTop <= scrollPos) {
+        if (!el) return;
+
+        const rect = el.getBoundingClientRect();
+        const sectionTop = scrollPos + rect.top;
+        const sectionBottom = sectionTop + rect.height;
+        
+        // Calculate how much of the section is visible in viewport
+        const visibleTop = Math.max(sectionTop, scrollPos);
+        const visibleBottom = Math.min(sectionBottom, scrollPos + windowHeight);
+        const visibleArea = Math.max(0, visibleBottom - visibleTop);
+        
+        // Check if viewport middle is within this section
+        const isInSection = viewportMiddle >= sectionTop && viewportMiddle <= sectionBottom;
+        
+        // Prioritize sections where viewport middle is within, then by visible area
+        if (isInSection || (visibleArea > maxVisibleArea && visibleArea > windowHeight * 0.3)) {
           activeIndex = i;
+          maxVisibleArea = visibleArea;
         }
       });
 
@@ -114,7 +136,7 @@ export default function Sidebar() {
         <span></span>
         <span></span>
       </div>
-      <div className={styles.sidebarNav}>
+      <div className={styles.sidebarNav} ref={navContainerRef}>
         <a href="#hero" className={`${styles.sidebarNavItem} ${styles.active}`}>
           <span className={styles.navNumber}>I</span>
           <span className={styles.navTitle}>Home</span>
@@ -136,7 +158,7 @@ export default function Sidebar() {
           <span className={styles.navTitle}>Topics</span>
         </a>
       </div>
-      <a href="#" className={styles.sidebarCta}>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfWdtM2nb8phwIPIFMmwbT_zMzTErtuxOe9ZSV1WjjrGQk52A/viewform" target="_blank" rel="noopener noreferrer" className={styles.sidebarCta}>
         Apply Now
       </a>
     </nav>

@@ -22,8 +22,11 @@ export default function Home() {
   const line2Ref = useRef<HTMLDivElement>(null);
   const line3Ref = useRef<HTMLDivElement>(null);
   const quoteRef = useRef<HTMLDivElement>(null);
+  const quoteTextRef = useRef<HTMLParagraphElement>(null);
   const nalleliRef = useRef<HTMLDivElement>(null);
+  const nalleliBioTextRef = useRef<HTMLParagraphElement>(null);
   const monicRef = useRef<HTMLDivElement>(null);
+  const monicBioTextRef = useRef<HTMLParagraphElement>(null);
   
   // Puzzle quote refs
   const puzzleWrapperRef = useRef<HTMLDivElement>(null);
@@ -125,6 +128,8 @@ export default function Home() {
 
   // Converge animation
   useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
+    
     const updateConverge = () => {
       const wrapper = wrapperRef.current;
       const section = sectionRef.current;
@@ -137,6 +142,65 @@ export default function Home() {
 
       if (!wrapper || !section || !line1 || !line2 || !line3 || !nextContent || !nalleliCard || !monicCard) return;
 
+      // Mobile: Static section with color change when centered in viewport
+      if (isMobile) {
+        const line2Rect = line2.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const windowMiddle = windowHeight / 2;
+        
+        // Check if line2 (WHO WE ARE) is centered in viewport
+        const line2Center = line2Rect.top + (line2Rect.height / 2);
+        const isCentered = Math.abs(line2Center - windowMiddle) < windowHeight * 0.2;
+        
+        // Track if color change has been triggered (once triggered, stay that way)
+        if (!section.dataset.colorChanged && isCentered) {
+          section.dataset.colorChanged = "true";
+        }
+
+        // Position all lines at convergence point (centered, stacked)
+        [line1, line2, line3].forEach((line) => {
+          line.style.transform = "translate(0, 0)";
+        });
+
+        // Apply color change if triggered (and keep it)
+        if (section.dataset.colorChanged === "true" || isCentered) {
+          section.style.background = "var(--color-coral)";
+          [line1, line2, line3].forEach((line) => {
+            line.style.background = "var(--color-coral)";
+            line.style.color = "var(--color-surface)";
+          });
+          
+          // Apply coral background to bio cards (permanent)
+          nalleliCard.style.background = "var(--color-coral)";
+          monicCard.style.background = "var(--color-coral)";
+          
+          // Apply white text to bio content
+          const nalleliText = nalleliCard.querySelectorAll('h2, p, a');
+          const monicText = monicCard.querySelectorAll('h2, p, a');
+          nalleliText.forEach((el) => {
+            (el as HTMLElement).style.color = "var(--color-surface)";
+          });
+          monicText.forEach((el) => {
+            (el as HTMLElement).style.color = "var(--color-surface)";
+          });
+        } else {
+          section.style.background = "var(--color-base)";
+          [line1, line2, line3].forEach((line) => {
+            line.style.background = "var(--color-base)";
+            line.style.color = "var(--color-surface)";
+          });
+        }
+        
+        // Show all content normally (no slide animations)
+        nextContent.style.transform = "translateX(0)";
+        nextContent.style.opacity = "1";
+        nalleliCard.style.transform = "translateX(0)";
+        nalleliCard.style.opacity = "1";
+        monicCard.style.transform = "translateX(0)";
+        monicCard.style.opacity = "1";
+        
+        return;
+      }
       const wrapperRect = wrapper.getBoundingClientRect();
       const wrapperTop = wrapperRect.top;
       const windowHeight = window.innerHeight;
@@ -211,8 +275,12 @@ export default function Home() {
     };
 
     window.addEventListener("scroll", updateConverge);
+    window.addEventListener("resize", updateConverge);
     updateConverge();
-    return () => window.removeEventListener("scroll", updateConverge);
+    return () => {
+      window.removeEventListener("scroll", updateConverge);
+      window.removeEventListener("resize", updateConverge);
+    };
   }, []);
 
   // Puzzle quote animation
@@ -264,6 +332,7 @@ export default function Home() {
     let animationFrame: number | null = null;
 
     function updatePuzzleReveal() {
+      if (!puzzleWrapper) return;
       const wrapperRect = puzzleWrapper.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
@@ -341,6 +410,7 @@ export default function Home() {
     });
 
     function wrapTextIntoLines() {
+      if (!fellowshipText) return [];
       const text = fellowshipText.textContent || "";
       const words = text.split(" ");
 
@@ -398,7 +468,7 @@ export default function Home() {
         const lettersDelay = allLetters.length * 25;
 
         setTimeout(() => {
-          fellowshipImage.classList.add("visible");
+          if (fellowshipImage) fellowshipImage.classList.add("visible");
         }, lettersDelay);
 
         textLines.forEach((line, index) => {
@@ -412,15 +482,34 @@ export default function Home() {
     function updateFellowshipParallax() {
       if (!fellowshipImage || !fellowshipSection) return;
       
+      const isMobile = window.innerWidth <= 768;
       const sectionRect = fellowshipSection.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
       // Calculate how far into the viewport the section is
       const sectionProgress = (windowHeight - sectionRect.top) / (windowHeight + sectionRect.height);
       const clampedProgress = Math.max(0, Math.min(1, sectionProgress));
-      const imageOffset = clampedProgress * 300;
+      
+      let imageOffset = clampedProgress * 300;
+      const maxParallax = 300;
 
-      // Move image down as you scroll (starts in place, moves down 300px)
+      // On mobile, limit parallax movement to prevent overlapping TOPICS section
+      if (isMobile) {
+        const beliefsSection = document.getElementById("beliefs-section");
+        if (beliefsSection) {
+          const beliefsRect = beliefsSection.getBoundingClientRect();
+          const distanceToBeliefs = beliefsRect.top - sectionRect.bottom;
+          
+          // Limit parallax to stop before beliefs section (with 100px buffer)
+          const maxMobileOffset = Math.max(0, distanceToBeliefs - 100);
+          imageOffset = Math.min(imageOffset, maxMobileOffset);
+        } else {
+          // If beliefs section not found, use a smaller max offset on mobile
+          imageOffset = clampedProgress * 150; // Reduced from 300px to 150px
+        }
+      }
+
+      // Move image down as you scroll (starts in place, moves down)
       fellowshipImage.style.transform = `translateY(${imageOffset}px)`;
     }
 
@@ -433,6 +522,143 @@ export default function Home() {
     return () => {
       window.removeEventListener("scroll", checkFellowshipVisibility);
       window.removeEventListener("scroll", updateFellowshipParallax);
+    };
+  }, []);
+
+  // Helper function to wrap text into lines
+  const wrapTextIntoLines = (textElement: HTMLParagraphElement) => {
+    const text = textElement.textContent || "";
+    const words = text.split(" ");
+
+    const tempSpan = document.createElement("span");
+    tempSpan.style.visibility = "hidden";
+    tempSpan.style.position = "absolute";
+    tempSpan.style.whiteSpace = "nowrap";
+    tempSpan.style.font = window.getComputedStyle(textElement).font;
+    document.body.appendChild(tempSpan);
+
+    const containerWidth = textElement.offsetWidth;
+    const lines: string[] = [];
+    let currentLine = "";
+
+    words.forEach((word) => {
+      const testLine = currentLine ? currentLine + " " + word : word;
+      tempSpan.textContent = testLine;
+
+      if (tempSpan.offsetWidth > containerWidth && currentLine) {
+        lines.push(currentLine);
+        currentLine = word;
+      } else {
+        currentLine = testLine;
+      }
+    });
+
+    if (currentLine) {
+      lines.push(currentLine);
+    }
+
+    document.body.removeChild(tempSpan);
+
+    textElement.innerHTML = lines.map((line) => `<span class="text-line">${line} </span>`).join("");
+    return textElement.querySelectorAll(".text-line");
+  };
+
+  // Quote text animation
+  useEffect(() => {
+    const quoteText = quoteTextRef.current;
+    if (!quoteText) return;
+
+    const textLines = wrapTextIntoLines(quoteText);
+    let quoteAnimated = false;
+
+    function checkQuoteVisibility() {
+      if (!quoteText || quoteAnimated) return;
+
+      const rect = quoteText.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      if (rect.top < windowHeight * 0.8) {
+        quoteAnimated = true;
+
+        textLines.forEach((line, index) => {
+          setTimeout(() => {
+            line.classList.add("visible");
+          }, index * 80);
+        });
+      }
+    }
+
+    window.addEventListener("scroll", checkQuoteVisibility, { passive: true });
+    checkQuoteVisibility();
+
+    return () => {
+      window.removeEventListener("scroll", checkQuoteVisibility);
+    };
+  }, []);
+
+  // Nalleli bio text animation
+  useEffect(() => {
+    const nalleliBioText = nalleliBioTextRef.current;
+    if (!nalleliBioText) return;
+
+    const textLines = wrapTextIntoLines(nalleliBioText);
+    let nalleliAnimated = false;
+
+    function checkNalleliVisibility() {
+      if (!nalleliBioText || nalleliAnimated) return;
+
+      const rect = nalleliBioText.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      if (rect.top < windowHeight * 0.8) {
+        nalleliAnimated = true;
+
+        textLines.forEach((line, index) => {
+          setTimeout(() => {
+            line.classList.add("visible");
+          }, index * 80);
+        });
+      }
+    }
+
+    window.addEventListener("scroll", checkNalleliVisibility, { passive: true });
+    checkNalleliVisibility();
+
+    return () => {
+      window.removeEventListener("scroll", checkNalleliVisibility);
+    };
+  }, []);
+
+  // Monic bio text animation
+  useEffect(() => {
+    const monicBioText = monicBioTextRef.current;
+    if (!monicBioText) return;
+
+    const textLines = wrapTextIntoLines(monicBioText);
+    let monicAnimated = false;
+
+    function checkMonicVisibility() {
+      if (!monicBioText || monicAnimated) return;
+
+      const rect = monicBioText.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      if (rect.top < windowHeight * 0.8) {
+        monicAnimated = true;
+
+        textLines.forEach((line, index) => {
+          setTimeout(() => {
+            line.classList.add("visible");
+          }, index * 80);
+        });
+      }
+    }
+
+    window.addEventListener("scroll", checkMonicVisibility, { passive: true });
+    checkMonicVisibility();
+
+    return () => {
+      window.removeEventListener("scroll", checkMonicVisibility);
     };
   }, []);
 
@@ -461,6 +687,7 @@ export default function Home() {
     let beliefsAnimated = false;
 
     function checkBeliefsVisibility() {
+      if (!beliefsHeading) return;
       const rect = beliefsHeading.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
@@ -475,7 +702,7 @@ export default function Home() {
 
         const lettersDelay = beliefsLetters.length * 30;
         setTimeout(() => {
-          beliefsSection.classList.add("colorShift");
+          if (beliefsSection) beliefsSection.classList.add("colorShift");
           if (fellowshipSection) fellowshipSection.classList.add("colorShift");
           if (footerRef.current) footerRef.current.classList.add("colorShift");
         }, lettersDelay + 100);
@@ -490,7 +717,7 @@ export default function Home() {
       if (rect.top >= windowHeight * 0.8 && beliefsAnimated) {
         beliefsAnimated = false;
         beliefsLetters.forEach((letter) => letter.classList.remove("visible"));
-        beliefsSection.classList.remove("colorShift");
+        if (beliefsSection) beliefsSection.classList.remove("colorShift");
         if (fellowshipSection) fellowshipSection.classList.remove("colorShift");
         if (footerRef.current) footerRef.current.classList.remove("colorShift");
         topicItems.forEach((item) => item.classList.remove("visible"));
@@ -510,7 +737,7 @@ export default function Home() {
         {/* Hero Section */}
         <section className={styles.hero} id="hero">
           <div className={styles.heroBackground}>
-            <img src="https://raw.githubusercontent.com/dbshinn5/SCYLCF/refs/heads/main/SCYLCF_NC_SPEAKING.webp" alt="Youth climate activist speaking passionately at rally" />
+            <img src="/images/who-we-are/youngnallelispeaking.webp" alt="Youth climate activist speaking passionately at rally" />
           </div>
 
           <nav className={styles.navStrip}>
@@ -530,8 +757,8 @@ export default function Home() {
               </h1>
               <div className={styles.headlineUnderline}></div>
               <div className={styles.ctaButtons}>
-                <a href="#" className={styles.btnPrimary}>Apply Now</a>
-                <a href="#" className={styles.btnOutline}>Our Story</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfWdtM2nb8phwIPIFMmwbT_zMzTErtuxOe9ZSV1WjjrGQk52A/viewform" target="_blank" rel="noopener noreferrer" className={styles.btnPrimary}>Apply Now</a>
+                <a href="#fellowship-details" className={styles.btnOutline}>Fellowship Details</a>
               </div>
             </div>
           </div>
@@ -580,7 +807,7 @@ export default function Home() {
                 </div>
                 <div className={styles.quoteContent}>
                   <span className={styles.quoteMark}>&quot;</span>
-                  <p className={styles.quoteText}>
+                  <p className={styles.quoteText} ref={quoteTextRef}>
                     We are a mother-daughter duo who have spent the last 15 years fighting to end urban oil extraction in Los Angeles and across California. We are channeling that shared passion into the SCYLC Fellowship.
                   </p>
                   <div className={styles.attribution}>
@@ -596,7 +823,7 @@ export default function Home() {
                     Nalleli <span>Cobo</span>
                   </h2>
                   <p className={styles.bioTitle}>Founder & Co-Director</p>
-                  <p className={styles.bioText}>
+                  <p className={styles.bioText} ref={nalleliBioTextRef}>
                     Nalleli Cobo is a South Los Angeles environmental justice activist who helped shut down a toxic urban oil-drilling site at age 19 and sparked major policy changes banning new oil extraction across the city and county. A Goldman Environmental Prize winner, she continues to lead movements against environmental racism and for community health.
                   </p>
                   <a href="#" className={styles.bioLink}>
@@ -618,7 +845,7 @@ export default function Home() {
                     Monic <span>Uriarte</span>
                   </h2>
                   <p className={styles.bioTitle}>Co-Director</p>
-                  <p className={styles.bioText}>
+                  <p className={styles.bioText} ref={monicBioTextRef}>
                     Monica Uriarte is a longtime South Los Angeles environmental justice advocate and co-founder of People Not Pozos, where she helped lead the successful campaign to shut down the toxic AllenCo oil site and advance major city, county, and state protections against urban drilling. She now serves as Director of Health Programs at Esperanza Community Housing, continuing her work for community health and environmental justice.
                   </p>
                   <a href="#" className={styles.bioLink}>
@@ -724,7 +951,7 @@ export default function Home() {
                   <p className={styles.topicPresenter}>
                     Fellows will receive a $5,000 stipend and, upon completing the program, will have the opportunity to apply for seed funding to launch their own community impact projects.
                   </p>
-                  <a href="#" className={styles.applyCta}>Apply Now</a>
+                  <a href="https://docs.google.com/forms/d/e/1FAIpQLSfWdtM2nb8phwIPIFMmwbT_zMzTErtuxOe9ZSV1WjjrGQk52A/viewform" target="_blank" rel="noopener noreferrer" className={styles.applyCta}>Apply Now</a>
                 </div>
               </div>
             </div>

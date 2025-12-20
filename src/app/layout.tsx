@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { DM_Sans, Anton } from "next/font/google";
 import "./globals.css";
 
@@ -17,6 +17,12 @@ const anton = Anton({
 export const metadata: Metadata = {
   title: "WHO WE ARE - SCYLC",
   description: "SCYLC Fellowship - Who We Are",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({

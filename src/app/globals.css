@@ -20,26 +20,3 @@ body {
   background: var(--color-base);
   color: var(--color-surface);
 }
-
-/* Main content offset for sidebar */
-.main-content {
-  margin-left: 70px;
-}
-
-@media (max-width: 1024px) {
-  .main-content {
-    margin-left: 60px;
-  }
-}
-
-@media (max-width: 768px) {
-  .main-content {
-    margin-left: 50px;
-  }
-}
-
-@media (max-width: 480px) {
-  .main-content {
-    margin-left: 45px;
-  }
-}

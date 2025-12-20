@@ -356,6 +356,14 @@
   position: relative;
 }
 
+@media (max-width: 768px) {
+  .convergeWrapper {
+    height: auto;
+    position: static;
+  }
+}
+
+
 .convergeSection {
   position: sticky;
   top: 0;
@@ -366,6 +374,13 @@
   justify-content: center;
   overflow: hidden;
   padding-top: 5vh;
+}
+
+@media (max-width: 768px) {
+  .convergeSection {
+    position: relative !important;
+    top: auto !important;
+  }
 }
 
 .convergeTextContainer {
@@ -389,6 +404,121 @@
   will-change: transform;
   padding: 0.05em 0.2em;
   background: var(--color-base);
+}
+
+@media (max-width: 768px) {
+  .convergeSection {
+    position: relative !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    display: block !important;
+    top: auto !important;
+  }
+
+  .convergeTextContainer {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 0 !important;
+    padding: 0 !important;
+  }
+
+  .convergeLine {
+    position: relative !important;
+    font-size: clamp(4rem, 15vw, 12rem);
+    margin: 0;
+    padding: 0.05em 0.2em;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .convergeLine.line2 {
+    position: relative !important;
+    min-height: 100vh;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .convergeLine.line1,
+  .convergeLine.line3 {
+    display: none !important;
+  }
+
+  .quoteCard {
+    position: relative !important;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+    padding: 3rem 1.5rem;
+    opacity: 1 !important;
+    transform: none !important;
+    width: 100% !important;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .quoteCard .quoteContent {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+  }
+  
+  .quoteCard .quoteText {
+    text-align: center;
+  }
+  
+  .quoteCard .attribution {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-top: 2px solid var(--color-surface);
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .quoteCard .attribution .names,
+  .quoteCard .attribution .role {
+    text-align: center;
+  }
+  
+  .quoteCard .polaroid {
+    margin: 0 auto;
+  }
+
+  .bioCard {
+    position: relative !important;
+    min-height: 100vh !important;
+    flex-direction: column-reverse;
+    gap: 2rem;
+    padding: 3rem 1.5rem;
+    opacity: 1 !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    visibility: visible !important;
+    z-index: 1;
+  }
+  
+  /* Ensure both bio cards are visible */
+  .bioCard:last-of-type {
+    margin-bottom: 0;
+  }
 }
 
 .line2 {
@@ -478,6 +608,19 @@
   max-width: 1200px;
   padding: 0 4rem;
   will-change: transform, opacity;
+}
+
+@media (max-width: 768px) {
+  .bioCard {
+    position: relative;
+    flex-direction: column-reverse;
+    gap: 2rem;
+    padding: 2rem 0;
+    opacity: 1 !important;
+    transform: none !important;
+    max-width: 100%;
+    width: 100%;
+  }
 }
 
 .bioTextCol {
@@ -715,14 +858,18 @@
   will-change: transform;
 }
 
-.fellowshipTextContainer :global(.text-line) {
+.fellowshipTextContainer :global(.text-line),
+.quoteText :global(.text-line),
+.bioText :global(.text-line) {
   display: inline;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.fellowshipTextContainer :global(.text-line.visible) {
+.fellowshipTextContainer :global(.text-line.visible),
+.quoteText :global(.text-line.visible),
+.bioText :global(.text-line.visible) {
   opacity: 1;
   transform: translateY(0);
 }
@@ -1008,9 +1155,13 @@
   }
 
   .bioCard {
-    flex-direction: column;
+    min-height: 100vh;
+    flex-direction: column-reverse;
     gap: 2rem;
-    padding: 0 2rem;
+    padding: 3rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .bioName {
@@ -1026,7 +1177,7 @@
   }
 
   .fellowshipImage {
-    right: 10%;
+    right: 4rem;
   }
 
   .beliefsSection {
@@ -1047,6 +1198,7 @@
   .heroContent {
     padding: 0 1.5rem 1.5rem;
   }
+
 
   .headline {
     font-size: clamp(2rem, 10vw, 4rem);
@@ -1102,9 +1254,13 @@
   }
 
   .quoteCard {
+    position: relative;
     flex-direction: column;
     gap: 1.5rem;
-    padding: 1.5rem;
+    padding: 1.5rem 0;
+    opacity: 1 !important;
+    transform: none !important;
+    width: 100%;
   }
 
   .polaroid img {
@@ -1123,10 +1279,14 @@
   }
 
   .bioCard {
+    min-height: 100vh;
     flex-direction: column-reverse;
     gap: 1.5rem;
-    padding: 0 1.5rem;
+    padding: 2rem 1.5rem;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .bioName {
@@ -1180,7 +1340,15 @@
     position: relative;
     right: auto;
     top: auto;
-    margin-top: 2rem;
+    margin: 2rem 1.5rem;
+    width: auto;
+    max-width: calc(100% - 3rem);
+  }
+
+  .fellowshipImage .polaroid {
+    margin: 0 auto;
+    width: fit-content;
+    max-width: 280px;
   }
 
   .fellowshipImage .polaroid img {
