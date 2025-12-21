@@ -119,11 +119,12 @@ function CardFan({
               key={idx}
               className="absolute bg-[#f5f5f0] shadow-lg"
               style={{
-                width: "180px",
+                width: "150px", // Reduced from 180px to prevent overflow
+                maxWidth: "calc((100vw - 114px) / 3)", // Ensure cards fit within container
                 padding: "0.5rem", // 0.5rem frame for cards
                 left: "50%",
                 top: "50%",
-                transform: `translate(-50%, -50%) translate(${pos.translateX}px, ${pos.translateY}px) rotate(${pos.rotation}deg)`,
+                transform: `translate(-50%, -50%) translate(${pos.translateX * 0.8}px, ${pos.translateY}px) rotate(${pos.rotation}deg)`, // Reduced translateX by 20%
                 zIndex: pos.zIndex,
                 transformOrigin: "center center",
                 boxShadow: "0 4px 6px rgba(0,0,0,0.3), 0 10px 40px rgba(0,0,0,0.4)",
@@ -132,7 +133,7 @@ function CardFan({
               <img
                 src={img}
                 alt=""
-                className={`w-full h-[220px] object-cover ${idx > 0 ? "grayscale" : ""}`}
+                className={`w-full h-[180px] object-cover ${idx > 0 ? "grayscale" : ""}`}
               />
             </div>
           );
@@ -206,8 +207,17 @@ function Polaroid({
 
   // Scale down larger photos for mobile (3 cards are fine, so only scale large/landscape photos)
   if (isMobile && (isLarge || isLandscape || isLargeLandscape)) {
-    const scale = 0.7; // Scale to 70% on mobile
+    const scale = 0.55; // Scale to 55% on mobile to prevent overflow
     // Convert to numeric values for calculation
+    const widthNum = parseFloat(width);
+    const heightNum = parseFloat(height);
+    width = `${widthNum * scale}px`;
+    height = `${heightNum * scale}px`;
+  }
+  
+  // Also scale down regular photos on mobile if they're still too large
+  if (isMobile && !isLarge && !isLandscape && !isLargeLandscape) {
+    const scale = 0.65; // Scale regular photos to 65% on mobile
     const widthNum = parseFloat(width);
     const heightNum = parseFloat(height);
     width = `${widthNum * scale}px`;
@@ -219,7 +229,7 @@ function Polaroid({
       className={`bg-[#f5f5f0] ${className}`}
       style={{
         width,
-        maxWidth: isMobile ? "100%" : width, // Constrain to container width on mobile
+        maxWidth: isMobile ? "calc(100vw - 114px)" : width, // Account for 82px left + 32px right padding on mobile
         padding: "1rem", // 1rem frame for all photos
         boxShadow: "0 4px 6px rgba(0,0,0,0.3), 0 10px 40px rgba(0,0,0,0.4)",
         transform: `rotate(${rotation}deg)`,
@@ -500,7 +510,7 @@ export function StoryScroll() {
                         top: isMobile ? "50%" : section.offsetY,
                         zIndex: 20 + index, // Higher z-index than text
                         willChange: "transform, opacity",
-                        maxWidth: isMobile ? "calc(100% - 0px)" : "none",
+                        maxWidth: isMobile ? "calc(100vw - 114px)" : "none", // Account for container padding
                         ...photoStyle,
                       }}
                     />
@@ -517,7 +527,7 @@ export function StoryScroll() {
                         top: isMobile ? "50%" : section.offsetY,
                         zIndex: 20 + index, // Higher z-index than text
                         willChange: "transform, opacity",
-                        maxWidth: isMobile ? "calc(100% - 0px)" : "none",
+                        maxWidth: isMobile ? "calc(100vw - 114px)" : "none", // Account for container padding
                         ...photoStyle,
                       }}
                     >
