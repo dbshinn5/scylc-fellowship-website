@@ -27,6 +27,7 @@ interface Section {
   rotation?: number;
   offsetX?: number;
   offsetY?: number;
+  photoCredit?: string;
 }
 
 const sections: Section[] = [
@@ -57,6 +58,7 @@ const sections: Section[] = [
     rotation: -3,
     offsetX: 30,
     offsetY: 80,
+    photoCredit: "Photo Credit - Garrett Grove",
   },
   {
     text: "Here in L.A., we also helped lead the charge for unanimous city and county votes to phase out existing oil drilling and ban new wells — a historic victory that will close the largest urban oil field in the United States.",
@@ -66,6 +68,7 @@ const sections: Section[] = [
     rotation: 5,
     offsetX: 50,
     offsetY: 90,
+    photoCredit: "Photo Credit - Garrett Grove",
   },
   {
     highlight: "I AM HONORED\nTO DO THIS WORK ALONGSIDE\nMY MOM.",
@@ -173,6 +176,7 @@ function Polaroid({
   style,
   className,
   isMobile = false,
+  photoCredit,
 }: {
   src: string;
   isLandscape?: boolean;
@@ -182,6 +186,7 @@ function Polaroid({
   style?: React.CSSProperties;
   className?: string;
   isMobile?: boolean;
+  photoCredit?: string;
 }) {
   let width = "320px";
   let height = "380px";
@@ -214,6 +219,7 @@ function Polaroid({
       className={`bg-[#f5f5f0] ${className}`}
       style={{
         width,
+        maxWidth: isMobile ? "100%" : width, // Constrain to container width on mobile
         padding: "1rem", // 1rem frame for all photos
         boxShadow: "0 4px 6px rgba(0,0,0,0.3), 0 10px 40px rgba(0,0,0,0.4)",
         transform: `rotate(${rotation}deg)`,
@@ -226,6 +232,20 @@ function Polaroid({
         className="w-full object-cover"
         style={{ height }}
       />
+      {photoCredit && (
+        <div
+          style={{
+            marginTop: "0.75rem",
+            fontSize: isMobile ? "0.75rem" : "0.875rem",
+            color: "#666",
+            fontFamily: "'DM Sans', sans-serif",
+            textAlign: "center",
+            lineHeight: 1.4,
+          }}
+        >
+          {photoCredit}
+        </div>
+      )}
     </div>
   );
 }
@@ -459,7 +479,7 @@ export function StoryScroll() {
             <div
               className={`relative ${
                 isMobile
-                  ? "w-full h-full flex items-center justify-center"
+                  ? "w-full h-full flex items-center justify-center overflow-hidden"
                   : "w-full h-[700px]"
               }`}
             >
@@ -480,6 +500,7 @@ export function StoryScroll() {
                         top: isMobile ? "50%" : section.offsetY,
                         zIndex: 20 + index, // Higher z-index than text
                         willChange: "transform, opacity",
+                        maxWidth: isMobile ? "calc(100% - 0px)" : "none",
                         ...photoStyle,
                       }}
                     />
@@ -496,6 +517,7 @@ export function StoryScroll() {
                         top: isMobile ? "50%" : section.offsetY,
                         zIndex: 20 + index, // Higher z-index than text
                         willChange: "transform, opacity",
+                        maxWidth: isMobile ? "calc(100% - 0px)" : "none",
                         ...photoStyle,
                       }}
                     >
@@ -506,6 +528,7 @@ export function StoryScroll() {
                         isLargeLandscape={section.isLargeLandscape}
                         rotation={isMobile ? 0 : section.rotation}
                         isMobile={isMobile}
+                        photoCredit={section.photoCredit}
                       />
                     </div>
                   );
@@ -525,6 +548,16 @@ export function StoryScroll() {
                 : "flex-1 h-full overflow-hidden z-10"
             }`}
           >
+            {/* Gradient overlay at bottom of text container on mobile */}
+            {isMobile && (
+              <div
+                className="absolute bottom-0 left-0 right-0 z-40 pointer-events-none"
+                style={{
+                  height: 150,
+                  background: `linear-gradient(to top, var(--color-base,#0D0D0D) 0%, var(--color-base,#0D0D0D) 40%, rgba(13,13,13,0.7) 70%, transparent 100%)`,
+                }}
+              />
+            )}
             <div
               className="absolute w-full"
               style={

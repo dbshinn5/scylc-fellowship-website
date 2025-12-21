@@ -766,9 +766,8 @@ export default function Home() {
           <div className={styles.bottomStrip}>
             <div className={styles.location}>Los Angeles, CA</div>
             <div className={styles.socialLinks}>
-              <a href="#">Instagram</a>
-              <a href="#">Twitter</a>
-              <a href="#">Contact</a>
+              <a href="https://www.instagram.com/scylcfellowship/" target="_blank" rel="noopener noreferrer">Instagram</a>
+              <a href="mailto:info@scylcfellowship.org">Contact</a>
             </div>
           </div>
         </section>

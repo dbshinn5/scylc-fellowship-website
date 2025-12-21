@@ -38,7 +38,7 @@ export default function Sidebar() {
       const scrollPos = window.scrollY;
       const windowHeight = window.innerHeight;
       const viewportMiddle = scrollPos + windowHeight / 2;
-      let activeIndex = 0;
+      let activeIndex = -1; // Start with no active section
       let maxVisibleArea = 0;
 
       sections.forEach((section, i) => {
@@ -57,12 +57,28 @@ export default function Sidebar() {
         // Check if viewport middle is within this section
         const isInSection = viewportMiddle >= sectionTop && viewportMiddle <= sectionBottom;
         
-        // Prioritize sections where viewport middle is within, then by visible area
-        if (isInSection || (visibleArea > maxVisibleArea && visibleArea > windowHeight * 0.3)) {
-          activeIndex = i;
-          maxVisibleArea = visibleArea;
+        // For hero section (index 0), only activate if it's actually in view
+        if (i === 0) {
+          // Hero section must be in viewport and viewport middle should be within it
+          if (rect.top < windowHeight && rect.bottom > 0 && isInSection) {
+            if (activeIndex === -1 || isInSection) {
+              activeIndex = i;
+              maxVisibleArea = visibleArea;
+            }
+          }
+        } else {
+          // For other sections, use the existing logic
+          if (isInSection || (visibleArea > maxVisibleArea && visibleArea > windowHeight * 0.3)) {
+            activeIndex = i;
+            maxVisibleArea = visibleArea;
+          }
         }
       });
+
+      // If no section is active and we're at the top, activate hero
+      if (activeIndex === -1 && scrollPos < 100) {
+        activeIndex = 0;
+      }
 
       navItems.forEach((item, i) => {
         if (i === activeIndex) {
@@ -156,7 +172,7 @@ export default function Sidebar() {
           <span></span>
         </div>
         <div className={`${styles.sidebarNav} ${isMenuOpen ? styles.menuOpen : ""}`} ref={navContainerRef}>
-        <Link href={isStoryPage ? "/#hero" : "#hero"} className={`${styles.sidebarNavItem} ${styles.active}`} onClick={handleLinkClick}>
+        <Link href={isStoryPage ? "/#hero" : "#hero"} className={styles.sidebarNavItem} onClick={handleLinkClick}>
           <span className={styles.navNumber}>I</span>
           <span className={styles.navTitle}>Home</span>
         </Link>
