@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import styles from "./Sidebar.module.css";
 
 export default function Sidebar() {
@@ -9,6 +10,8 @@ export default function Sidebar() {
   const navContainerRef = useRef<HTMLDivElement>(null);
   const navItemsRef = useRef<Element[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isStoryPage = pathname === "/story";
 
   useEffect(() => {
     const sidebar = sidebarRef.current;
@@ -149,26 +152,26 @@ export default function Sidebar() {
           <span></span>
         </div>
         <div className={`${styles.sidebarNav} ${isMenuOpen ? styles.menuOpen : ""}`} ref={navContainerRef}>
-        <a href="#hero" className={`${styles.sidebarNavItem} ${styles.active}`}>
+        <Link href={isStoryPage ? "/#hero" : "#hero"} className={`${styles.sidebarNavItem} ${styles.active}`}>
           <span className={styles.navNumber}>I</span>
           <span className={styles.navTitle}>Home</span>
-        </a>
-        <a href="#story" className={styles.sidebarNavItem}>
+        </Link>
+        <Link href={isStoryPage ? "/#story" : "#story"} className={styles.sidebarNavItem}>
           <span className={styles.navNumber}>II</span>
           <span className={styles.navTitle}>Mission</span>
-        </a>
-        <a href="#converge-wrapper" className={styles.sidebarNavItem}>
+        </Link>
+        <Link href={isStoryPage ? "/#converge-wrapper" : "#converge-wrapper"} className={styles.sidebarNavItem}>
           <span className={styles.navNumber}>III</span>
           <span className={styles.navTitle}>Who We Are</span>
-        </a>
-        <a href="#fellowship-details" className={`${styles.sidebarNavItem} ${styles.highlight}`}>
+        </Link>
+        <Link href={isStoryPage ? "/#fellowship-details" : "#fellowship-details"} className={`${styles.sidebarNavItem} ${styles.highlight}`}>
           <span className={styles.navNumber}>IV</span>
           <span className={styles.navTitle}>Fellowship</span>
-        </a>
-        <a href="#beliefs-section" className={styles.sidebarNavItem}>
+        </Link>
+        <Link href={isStoryPage ? "/#beliefs-section" : "#beliefs-section"} className={styles.sidebarNavItem}>
           <span className={styles.navNumber}>V</span>
           <span className={styles.navTitle}>Topics</span>
-        </a>
+        </Link>
         <Link href="/story" className={styles.sidebarNavItem}>
           <span className={styles.navNumber}>VI</span>
           <span className={styles.navTitle}>Our Story</span>

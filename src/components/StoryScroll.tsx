@@ -393,7 +393,7 @@ export function StoryScroll() {
     return {
       transform: `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px) rotate(${rotation}deg)`,
       opacity,
-      transition: "opacity 0.3s ease, transform 0.3s ease",
+      transition: "opacity 0.2s ease, transform 0.2s ease",
     };
   };
 
@@ -401,7 +401,7 @@ export function StoryScroll() {
     <div
       ref={containerRef}
       className="relative bg-[var(--color-base,#0D0D0D)]"
-      style={{ height: `${totalSections * 140}vh` }}
+      style={{ height: `${totalSections * 100}vh` }}
     >
       <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
         {/* Gradient overlays */}
@@ -437,7 +437,7 @@ export function StoryScroll() {
                 ? "w-full h-[45vh] flex-shrink-0 order-2 pt-5 z-20"
                 : "w-[40%] max-w-[600px] h-full flex-shrink-0 z-20"
             }`}
-            style={isMobile ? { paddingLeft: "32px", paddingRight: "32px" } : {}}
+            style={isMobile ? { paddingLeft: "82px", paddingRight: "32px" } : {}}
           >
             <div
               className={`relative ${
@@ -515,7 +515,7 @@ export function StoryScroll() {
                   ? { height: "100%" }
                   : {
                       transform: `translateY(${35 - textProgress * (totalSections * 60)}vh)`,
-                      transition: "transform 0.1s linear",
+                      transition: "transform 0.05s linear",
                     }
               }
             >
@@ -527,7 +527,7 @@ export function StoryScroll() {
                       ? `absolute w-full left-0 top-1/2 mb-4 justify-start ${section.highlight && section.isIntro ? "text-center justify-center" : "text-left"}`
                       : "min-h-[60vh] pr-10"
                   }`}
-                  style={isMobile ? { paddingLeft: "32px", paddingRight: "32px", ...getTextTransform(index) } : {}}
+                  style={isMobile ? { paddingLeft: "82px", paddingRight: "32px", ...getTextTransform(index) } : {}}
                 >
                   {section.highlight ? (
                     <h2
