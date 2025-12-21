@@ -620,6 +620,25 @@
     transform: none !important;
     max-width: 100%;
     width: 100%;
+    transition: all 0.3s ease;
+  }
+
+  .bioCard.expanded {
+    padding-bottom: 3rem;
+  }
+
+  .bioText {
+    transition: all 0.3s ease;
+    text-align: left;
+  }
+
+  .bioText p {
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+
+  .bioText p:last-child {
+    margin-bottom: 0;
   }
 }
 
@@ -656,6 +675,7 @@
   line-height: 1.8;
   color: var(--color-surface);
   max-width: 500px;
+  text-align: left;
 }
 
 .bioLink {
@@ -1430,4 +1450,242 @@
   .beliefsHeading {
     font-size: clamp(3rem, 18vw, 6rem);
   }
+}
+
+/* Overlay Styles */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.overlayContent {
+  position: relative;
+  background: var(--color-coral);
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 3rem;
+  padding-bottom: 0;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  color: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+}
+
+.overlayGradient {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 250px;
+  background: linear-gradient(to top, var(--color-coral) 0%, var(--color-coral) 20%, var(--color-coral) 40%, rgba(217,68,53,0.9) 60%, rgba(217,68,53,0.6) 75%, rgba(217,68,53,0.3) 90%, transparent 100%);
+  pointer-events: none;
+  z-index: 100;
+  margin-top: auto;
+  align-self: flex-end;
+  flex-shrink: 0;
+}
+
+.overlayClose {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: transparent;
+  border: none;
+  color: var(--color-surface);
+  font-size: 2.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+  z-index: 1;
+}
+
+.overlayClose:hover {
+  color: var(--color-base);
+}
+
+.overlayContent .bioCard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background: transparent;
+  transform: none;
+  opacity: 1;
+  position: relative;
+  padding: 0;
+}
+
+.overlayContent .bioHeaderRow {
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+  align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+  .overlayContent .bioHeaderRow {
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+    align-items: center !important;
+  }
+}
+
+.overlayContent .bioTextCol {
+  flex: 1;
+}
+
+.overlayContent .bioText {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-top: 0;
+  max-width: none;
+  color: var(--color-surface);
+}
+
+.overlayContent .bioName,
+.overlayContent .bioName span {
+  color: var(--color-surface);
+}
+
+.overlayContent .bioTitle {
+  color: var(--color-surface);
+}
+
+.overlayContent .bioText p {
+  margin-bottom: 1.5rem;
+}
+
+.overlayContent .bioText p:last-child {
+  margin-bottom: 0;
+}
+
+.overlayContent .bioImageCol {
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .overlay {
+    padding: 0;
+    align-items: flex-start;
+    padding-top: 0;
+    overflow-y: auto;
+  }
+
+  .overlayContent {
+    padding: 5rem 1.5rem 0 1.5rem;
+    max-height: 100vh;
+    overflow-y: auto;
+    border-radius: 0;
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  .overlayClose {
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    width: 35px;
+    height: 35px;
+    z-index: 101;
+  }
+
+  .overlayContent .bioHeaderRow {
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+    align-items: center !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    display: flex !important;
+  }
+
+  .overlayContent .bioImageCol {
+    order: -1 !important; /* Move photo above name/title on mobile */
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    flex: 0 0 auto !important;
+    position: relative !important;
+    height: auto !important;
+    margin-bottom: 1rem !important;
+    margin-top: 0 !important;
+    padding: 0 !important;
+  }
+
+  .overlayContent .bioImageCol .polaroid {
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-width: 180px !important;
+    width: auto !important;
+    margin: 0 auto !important;
+    display: block !important;
+    position: relative !important;
+    transform: none !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+  }
+
+  .overlayContent .bioImageCol .polaroidInner {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .overlayContent .bioImageCol .polaroid img {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-width: 100%;
+  }
+
+  .overlayContent .bioHeaderRow .bioTextCol {
+    order: 1; /* Move name/title below photo on mobile */
+    text-align: center;
+    width: 100%;
+  }
+
+  .overlayContent .bioName {
+    text-align: center;
+  }
+
+  .overlayContent .bioTitle {
+    text-align: center;
+  }
+
+  .overlayContent .bioText {
+    font-size: 1rem;
+    text-align: left;
+  }
+
+  .overlayGradient {
+    position: sticky;
+    bottom: 0;
+    height: 200px;
+  }
+
 }

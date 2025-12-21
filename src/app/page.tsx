@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import styles from "./page.module.css";
 
@@ -44,6 +44,21 @@ export default function Home() {
   const beliefsSectionRef = useRef<HTMLElement>(null);
   const topicsListRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLElement>(null);
+  
+  // Overlay state
+  const [showNalleliOverlay, setShowNalleliOverlay] = useState(false);
+  const [showMonicOverlay, setShowMonicOverlay] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [nalleliExpanded, setNalleliExpanded] = useState(false);
+  const [monicExpanded, setMonicExpanded] = useState(false);
+
+  // Check if mobile
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Hero headline animation
   useEffect(() => {
@@ -754,7 +769,7 @@ export default function Home() {
                 <span className="line highlight">LA YOUTH</span>
                 <span className="line">TO LEAD IN</span>
                 <span className="line">CLIMATE ACTION</span>
-              </h1>
+          </h1>
               <div className={styles.headlineUnderline}></div>
               <div className={styles.ctaButtons}>
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSfWdtM2nb8phwIPIFMmwbT_zMzTErtuxOe9ZSV1WjjrGQk52A/viewform" target="_blank" rel="noopener noreferrer" className={styles.btnPrimary}>Apply Now</a>
@@ -823,9 +838,40 @@ export default function Home() {
                   </h2>
                   <p className={styles.bioTitle}>Founder & Co-Director</p>
                   <p className={styles.bioText} ref={nalleliBioTextRef}>
-                    Nalleli Cobo is a South Los Angeles environmental justice activist who helped shut down a toxic urban oil-drilling site at age 19 and sparked major policy changes banning new oil extraction across the city and county. A Goldman Environmental Prize winner, she continues to lead movements against environmental racism and for community health.
+                    {nalleliExpanded && isMobile ? (
+                      <>
+                        <p>
+                          Nalleli Cobo is an environmental justice activist and storyteller who led a grassroots campaign to permanently shut down a toxic oil-drilling site in her community in March 2020 at the age of 19—an oil site that caused serious health issues for her and others. Her organizing against urban oil extraction has yielded major policy movement within the Los Angeles City Council and Los Angeles County Board of Supervisors, which voted unanimously on bans of new oil exploration and phasing out existing sites.
+                        </p>
+                        <p>
+                          Nalleli, 22, grew up in South Los Angeles and launched her activism as a 9-year-old after noticing foul smells emanating from the oil well across the street from her home. Over the years, she endured headaches, nosebleeds, and heart palpitations caused by pollution from the well. She began attending meetings and rallies with her mother and, at the age of 9, gave her first public speech on the issue. Even as a child, her skills as an orator caught others' attention and paved the way for her to eventually become the leading spokesperson for banning oil extraction in Los Angeles.
+                        </p>
+                        <p>
+                          She co-founded People Not Pozos, which aims to secure a safe and healthy neighborhood, and the South Central Youth Leadership Coalition, which focuses on environmental racism in the community. In March 2020, Nalleli's tireless organizing culminated in the definitive closure of the AllenCo drilling site across the street from her childhood home. In addition, thanks to her work, AllenCo executives are facing over 24 criminal charges for environmental health and safety violations. Moreover, Nalleli's leadership spurred preliminary votes in the City Council in favor of banning oil extraction in the city in 2020.
+                        </p>
+                        <p>
+                          She was diagnosed with cancer at the age of 19. After three surgeries and medical treatment, she was declared cancer-free but cannot have children as a result of her illness. In the end, Nalleli led a citizens' movement that shut down an oil drilling site and initiated the process to phase out the largest urban oil field in the US.
+                        </p>
+                        <p>
+                          Nalleli's story and leadership also inspired the enactment of SB 1137, which bans all new oil wells within 3,200 feet of communities in California. Nalleli won the 2022 Goldman Environmental Prize, was named on the 2022 Time 100 Next list, California Energy Commission Hall of Fame, Activist of the Year, Agente de Cambio, and more.
+                        </p>
+                      </>
+                    ) : (
+                      "Nalleli Cobo is a South Los Angeles environmental justice activist who helped shut down a toxic urban oil-drilling site at age 19 and sparked major policy changes banning new oil extraction across the city and county. A Goldman Environmental Prize winner, she continues to lead movements against environmental racism and for community health."
+                    )}
                   </p>
-                  <a href="#" className={styles.bioLink}>
+                  <a 
+                    href="#" 
+                    className={styles.bioLink}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (isMobile) {
+                        setNalleliExpanded(!nalleliExpanded);
+                      } else {
+                        setShowNalleliOverlay(true);
+                      }
+                    }}
+                  >
                     About Nalleli
                   </a>
                 </div>
@@ -838,16 +884,44 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className={styles.bioCard} ref={monicRef}>
+              <div className={`${styles.bioCard} ${monicExpanded && isMobile ? styles.expanded : ""}`} ref={monicRef}>
                 <div className={styles.bioTextCol}>
                   <h2 className={styles.bioName}>
                     Monic <span>Uriarte</span>
                   </h2>
                   <p className={styles.bioTitle}>Co-Director</p>
-                  <p className={styles.bioText} ref={monicBioTextRef}>
-                    Monica Uriarte is a longtime South Los Angeles environmental justice advocate and co-founder of People Not Pozos, where she helped lead the successful campaign to shut down the toxic AllenCo oil site and advance major city, county, and state protections against urban drilling. She now serves as Director of Health Programs at Esperanza Community Housing, continuing her work for community health and environmental justice.
-                  </p>
-                  <a href="#" className={styles.bioLink}>
+                  <div className={styles.bioText} ref={monicBioTextRef}>
+                    {monicExpanded && isMobile ? (
+                      <>
+                        <p>
+                          Monic Uriarte has been a tireless advocate for environmental justice, community health, and human rights in South Los Angeles for nearly three decades. Since 1998, she has served as a Community Health Promoter, where her lifelong passion for helping others has driven her to create tangible change in the lives of residents most impacted by environmental and health inequities. As an early leader in the Healthy Homes Project, Monic combined her background as a teacher and her skills as a Health Educator to help families identify and address household hazards, empowering them with knowledge to live in healthier, safer environments.
+                        </p>
+                        <p>
+                          Monic's environmental justice work is most powerfully reflected in her co-founding of People Not Pozos a community-led coalition formed in response to the dangerous oil drilling operations located in her own neighborhood. Under her leadership, People Not Pozos mobilized residents, built partnerships with health and environmental organizations, and successfully campaigned to shut down a nearby AllenCo Energy oil site after years of community exposure to toxic emissions. Her unwavering advocacy not only brought local relief but also helped lay the foundation for broader systemic change.
+                        </p>
+                        <p>
+                          Monic's grassroots efforts contributed to landmark victories, including the passage of SB 1137, a California law establishing health and safety buffer zones between oil wells and sensitive sites such as homes, schools, and hospitals. She also played a vital role in the successful City and County of Los Angeles motions to phase out urban oil drilling, protecting countless families from future environmental harm.
+                        </p>
+                        <p>
+                          Today, as Director of Health Programs at Esperanza Community Housing, Monic continues to lead with compassion and purpose—advancing health equity, environmental sustainability, and justice for all Angelenos. Her leadership remains a beacon of hope and empowerment in the ongoing fight for healthy, thriving communities.
+                        </p>
+                      </>
+                    ) : (
+                      <p>Monica Uriarte is a longtime South Los Angeles environmental justice advocate and co-founder of People Not Pozos, where she helped lead the successful campaign to shut down the toxic AllenCo oil site and advance major city, county, and state protections against urban drilling. She now serves as Director of Health Programs at Esperanza Community Housing, continuing her work for community health and environmental justice.</p>
+                    )}
+                  </div>
+                  <a 
+                    href="#" 
+                    className={styles.bioLink}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (isMobile) {
+                        setMonicExpanded(!monicExpanded);
+                      } else {
+                        setShowMonicOverlay(true);
+                      }
+                    }}
+                  >
                     About Monic
                   </a>
                 </div>
@@ -975,6 +1049,131 @@ export default function Home() {
           </div>
         </footer>
       </div>
+
+      {/* Nalleli Bio Overlay */}
+      {showNalleliOverlay && !isMobile && (
+        <div 
+          className={styles.overlay}
+          onClick={() => setShowNalleliOverlay(false)}
+        >
+          <div 
+            className={styles.overlayContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              className={styles.overlayClose}
+              onClick={() => setShowNalleliOverlay(false)}
+              aria-label="Close overlay"
+            >
+              ×
+            </button>
+            <div className={styles.bioCard}>
+              <div className={styles.bioHeaderRow}>
+                <div className={styles.bioTextCol}>
+                  <h2 className={styles.bioName}>
+                    Nalleli <span>Cobo</span>
+                  </h2>
+                  <p className={styles.bioTitle}>Founder & Co-Director</p>
+                </div>
+                <div className={styles.bioImageCol}>
+                  <div className={styles.polaroid}>
+                    <div className={styles.polaroidInner}>
+                      <img src="/images/who-we-are/Nalleli headshot 1.webp" alt="Nalleli Cobo" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.bioTextCol}>
+                <div className={styles.bioText}>
+                  <p>
+                    Nalleli Cobo is an environmental justice activist and storyteller who led a grassroots campaign to permanently shut down a toxic oil-drilling site in her community in March 2020 at the age of 19—an oil site that caused serious health issues for her and others. Her organizing against urban oil extraction has yielded major policy movement within the Los Angeles City Council and Los Angeles County Board of Supervisors, which voted unanimously on bans of new oil exploration and phasing out existing sites.
+                  </p>
+                  <p>
+                    Nalleli, 22, grew up in South Los Angeles and launched her activism as a 9-year-old after noticing foul smells emanating from the oil well across the street from her home. Over the years, she endured headaches, nosebleeds, and heart palpitations caused by pollution from the well. She began attending meetings and rallies with her mother and, at the age of 9, gave her first public speech on the issue. Even as a child, her skills as an orator caught others' attention and paved the way for her to eventually become the leading spokesperson for banning oil extraction in Los Angeles.
+                  </p>
+                  <p>
+                    She co-founded People Not Pozos, which aims to secure a safe and healthy neighborhood, and the South Central Youth Leadership Coalition, which focuses on environmental racism in the community. In March 2020, Nalleli's tireless organizing culminated in the definitive closure of the AllenCo drilling site across the street from her childhood home. In addition, thanks to her work, AllenCo executives are facing over 24 criminal charges for environmental health and safety violations. Moreover, Nalleli's leadership spurred preliminary votes in the City Council in favor of banning oil extraction in the city in 2020.
+                  </p>
+                  <p>
+                    She was diagnosed with cancer at the age of 19. After three surgeries and medical treatment, she was declared cancer-free but cannot have children as a result of her illness. In the end, Nalleli led a citizens' movement that shut down an oil drilling site and initiated the process to phase out the largest urban oil field in the US.
+                  </p>
+                  <p>
+                    Nalleli's story and leadership also inspired the enactment of SB 1137, which bans all new oil wells within 3,200 feet of communities in California. Nalleli won the 2022 Goldman Environmental Prize, was named on the 2022 Time 100 Next list, California Energy Commission Hall of Fame, Activist of the Year, Agente de Cambio, and more.
+                  </p>
+                </div>
+              </div>
+            </div>
+            {/* Gradient overlay at bottom of popup box */}
+            <div
+              className={styles.overlayGradient}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Monic Bio Overlay - Desktop only */}
+      {showMonicOverlay && !isMobile && (
+        <>
+          {/* Gradient overlay at bottom of viewport */}
+          <div
+            className={styles.overlayGradient}
+          />
+          <div 
+            className={styles.overlay}
+            onClick={() => setShowMonicOverlay(false)}
+          >
+            <div 
+              className={styles.overlayContent}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                className={styles.overlayClose}
+                onClick={() => setShowMonicOverlay(false)}
+                aria-label="Close overlay"
+              >
+                ×
+              </button>
+              <div className={styles.bioCard}>
+                <div className={styles.bioHeaderRow}>
+                  <div className={styles.bioTextCol}>
+                    <h2 className={styles.bioName}>
+                      Monic <span>Uriarte</span>
+                    </h2>
+                    <p className={styles.bioTitle}>Co-Director</p>
+                  </div>
+                  <div className={styles.bioImageCol}>
+                    <div className={styles.polaroid}>
+                      <div className={styles.polaroidInner}>
+                        <img src="/images/who-we-are/Monic_speakershot.webp" alt="Monica Uriarte" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.bioTextCol}>
+                  <div className={styles.bioText}>
+                    <p>
+                      Monic Uriarte has been a tireless advocate for environmental justice, community health, and human rights in South Los Angeles for nearly three decades. Since 1998, she has served as a Community Health Promoter, where her lifelong passion for helping others has driven her to create tangible change in the lives of residents most impacted by environmental and health inequities. As an early leader in the Healthy Homes Project, Monic combined her background as a teacher and her skills as a Health Educator to help families identify and address household hazards, empowering them with knowledge to live in healthier, safer environments.
+                    </p>
+                    <p>
+                      Monic's environmental justice work is most powerfully reflected in her co-founding of People Not Pozos a community-led coalition formed in response to the dangerous oil drilling operations located in her own neighborhood. Under her leadership, People Not Pozos mobilized residents, built partnerships with health and environmental organizations, and successfully campaigned to shut down a nearby AllenCo Energy oil site after years of community exposure to toxic emissions. Her unwavering advocacy not only brought local relief but also helped lay the foundation for broader systemic change.
+                    </p>
+                    <p>
+                      Monic's grassroots efforts contributed to landmark victories, including the passage of SB 1137, a California law establishing health and safety buffer zones between oil wells and sensitive sites such as homes, schools, and hospitals. She also played a vital role in the successful City and County of Los Angeles motions to phase out urban oil drilling, protecting countless families from future environmental harm.
+                    </p>
+                    <p>
+                      Today, as Director of Health Programs at Esperanza Community Housing, Monic continues to lead with compassion and purpose—advancing health equity, environmental sustainability, and justice for all Angelenos. Her leadership remains a beacon of hope and empowerment in the ongoing fight for healthy, thriving communities.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              {/* Gradient overlay at bottom of popup box */}
+              <div
+                className={styles.overlayGradient}
+              />
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }
