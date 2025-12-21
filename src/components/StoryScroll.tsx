@@ -273,25 +273,23 @@ export function StoryScroll() {
   const currentSection = Math.min(totalSections - 1, Math.floor(sectionProgress));
   const sectionFraction = sectionProgress - currentSection;
 
-  // Desktop text scroll - end when last section (index 5) is centered in viewport
+  // Desktop text scroll - end when last section is positioned in upper-middle of viewport (~35% from top)
   // The transform is: translateY(35 - textProgress * (totalSections * 60))vh
   // Each section is 60vh tall (min-h-[60vh])
   // Last section (index 5) starts at: 5 * 60vh = 300vh from top of text container
-  // To center it in viewport (50vh from top), we need:
-  //   300vh + (35 - textProgress * 360)vh = 50vh
-  //   Solving: textProgress = (35 + 300 - 50) / 360 = 285 / 360 = 0.7917
-  // But we need to allow more scrolling to ensure the full text is visible
+  // To position it at upper-middle (35vh from top), we need:
+  //   300vh + (35 - textProgress * 360)vh = 35vh
+  //   Solving: textProgress = (35 + 300 - 35) / 360 = 300 / 360 = 0.8333
   const sectionHeight = 60; // 60vh per section
   const lastSectionIndex = totalSections - 1; // Index 5
   const lastSectionStartPosition = lastSectionIndex * sectionHeight; // 300vh
-  const viewportCenter = 50; // 50vh (center of viewport)
+  const targetViewportPosition = 35; // 35vh from top (upper-middle of viewport)
   const initialOffset = 35; // 35vh (starting transform)
   const maxTransformRange = totalSections * sectionHeight; // 360vh
-  // Calculate progress needed for text to center: initialOffset - textProgress * maxTransformRange + lastSectionStartPosition = viewportCenter
-  // textProgress = (initialOffset + lastSectionStartPosition - viewportCenter) / maxTransformRange
-  // Add extra progress to ensure full text is visible (allow ~10% more scrolling)
-  const baseMaxTextProgress = (initialOffset + lastSectionStartPosition - viewportCenter) / maxTransformRange;
-  const maxTextProgress = Math.min(1, baseMaxTextProgress + 0.10); // Allow 10% more scrolling
+  // Calculate progress needed for text to reach target position: initialOffset - textProgress * maxTransformRange + lastSectionStartPosition = targetViewportPosition
+  // textProgress = (initialOffset + lastSectionStartPosition - targetViewportPosition) / maxTransformRange
+  const baseMaxTextProgress = (initialOffset + lastSectionStartPosition - targetViewportPosition) / maxTransformRange;
+  const maxTextProgress = Math.min(1, baseMaxTextProgress + 0.10); // Allow 10% more scrolling for smooth landing
   // Allow photos to animate fully (use full progress), but cap text animation separately
   const textProgress = Math.min(progress, maxTextProgress);
   const cappedProgress = progress; // Use full progress for photos
@@ -362,26 +360,45 @@ export function StoryScroll() {
       };
     }
 
-    // Mobile animation - sync with text using same section progress logic
+    // Mobile animation - photos appear after paragraph is fully in view
     const containerHeight = textContainerRef.current?.offsetHeight || window.innerHeight * 0.55;
     let opacity: number;
+    let transition: string;
+
+    // Photo appears after text paragraph is fully visible (when sectionFraction reaches ~0.6)
+    const photoAppearThreshold = 0.6;
 
     if (index < currentSection) {
+      // Past photos are hidden
       opacity = 0;
+      transition = "opacity 0.15s ease-out, transform 0.15s ease-out";
     } else if (index === currentSection) {
-      // For last section, ensure it's fully visible when text is centered
-      if (index === totalSections - 1 && currentSection === totalSections - 1 && sectionFraction >= 0.9) {
-        // When last section text is centered, photo should be fully visible
-        opacity = 1;
+      // Current photo - visible while its text paragraph is in view
+      // Hide when next section's text starts appearing (sectionFraction > photoAppearThreshold)
+      if (sectionFraction > photoAppearThreshold) {
+        // Next section's text is fully in view, hide current photo
+        opacity = 0;
+        transition = "opacity 0.15s ease-out, transform 0.15s ease-out";
       } else {
-        // Same opacity calculation as text
-        opacity = 1 - sectionFraction * 0.8;
+        // Current photo visible while its text is in view
+        opacity = 1;
+        transition = "opacity 0.15s ease-out, transform 0.15s ease-out";
       }
     } else if (index === currentSection + 1) {
-      // Next section starting to appear
-      opacity = sectionFraction;
+      // Next photo - appear after its paragraph is fully in view
+      if (sectionFraction >= photoAppearThreshold) {
+        // Paragraph is fully in view, show photo quickly
+        opacity = 1;
+        transition = "opacity 0.15s ease-out, transform 0.15s ease-out";
+      } else {
+        // Paragraph not fully in view yet, keep photo hidden
+        opacity = 0;
+        transition = "opacity 0.15s ease-out, transform 0.15s ease-out";
+      }
     } else {
+      // Future photos not visible
       opacity = 0;
+      transition = "opacity 0.15s ease-out, transform 0.15s ease-out";
     }
 
     const rotation = (section.rotation || 0) * 0.7;
@@ -393,7 +410,7 @@ export function StoryScroll() {
     return {
       transform: `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px) rotate(${rotation}deg)`,
       opacity,
-      transition: "opacity 0.2s ease, transform 0.2s ease",
+      transition,
     };
   };
 

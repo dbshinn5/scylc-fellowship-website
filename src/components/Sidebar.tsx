@@ -13,6 +13,10 @@ export default function Sidebar() {
   const pathname = usePathname();
   const isStoryPage = pathname === "/story";
 
+  const handleLinkClick = () => {
+    setIsMenuOpen(false);
+  };
+
   useEffect(() => {
     const sidebar = sidebarRef.current;
     if (!sidebar) return;
@@ -152,27 +156,27 @@ export default function Sidebar() {
           <span></span>
         </div>
         <div className={`${styles.sidebarNav} ${isMenuOpen ? styles.menuOpen : ""}`} ref={navContainerRef}>
-        <Link href={isStoryPage ? "/#hero" : "#hero"} className={`${styles.sidebarNavItem} ${styles.active}`}>
+        <Link href={isStoryPage ? "/#hero" : "#hero"} className={`${styles.sidebarNavItem} ${styles.active}`} onClick={handleLinkClick}>
           <span className={styles.navNumber}>I</span>
           <span className={styles.navTitle}>Home</span>
         </Link>
-        <Link href={isStoryPage ? "/#story" : "#story"} className={styles.sidebarNavItem}>
+        <Link href={isStoryPage ? "/#story" : "#story"} className={styles.sidebarNavItem} onClick={handleLinkClick}>
           <span className={styles.navNumber}>II</span>
           <span className={styles.navTitle}>Mission</span>
         </Link>
-        <Link href={isStoryPage ? "/#converge-wrapper" : "#converge-wrapper"} className={styles.sidebarNavItem}>
+        <Link href={isStoryPage ? "/#converge-wrapper" : "#converge-wrapper"} className={styles.sidebarNavItem} onClick={handleLinkClick}>
           <span className={styles.navNumber}>III</span>
           <span className={styles.navTitle}>Who We Are</span>
         </Link>
-        <Link href={isStoryPage ? "/#fellowship-details" : "#fellowship-details"} className={`${styles.sidebarNavItem} ${styles.highlight}`}>
+        <Link href={isStoryPage ? "/#fellowship-details" : "#fellowship-details"} className={`${styles.sidebarNavItem} ${styles.highlight}`} onClick={handleLinkClick}>
           <span className={styles.navNumber}>IV</span>
           <span className={styles.navTitle}>Fellowship</span>
         </Link>
-        <Link href={isStoryPage ? "/#beliefs-section" : "#beliefs-section"} className={styles.sidebarNavItem}>
+        <Link href={isStoryPage ? "/#beliefs-section" : "#beliefs-section"} className={styles.sidebarNavItem} onClick={handleLinkClick}>
           <span className={styles.navNumber}>V</span>
           <span className={styles.navTitle}>Topics</span>
         </Link>
-        <Link href="/story" className={styles.sidebarNavItem}>
+        <Link href="/story" className={styles.sidebarNavItem} onClick={handleLinkClick}>
           <span className={styles.navNumber}>VI</span>
           <span className={styles.navTitle}>Our Story</span>
         </Link>
