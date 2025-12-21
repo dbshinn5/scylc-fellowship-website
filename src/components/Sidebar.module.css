@@ -43,6 +43,72 @@
   align-items: center;
   gap: 0.5rem;
   margin-top: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.menuOverlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 998;
+}
+
+.menuOverlay {
+  display: block;
+}
+
+.sidebarHamburger.hamburgerOpen span:first-child {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.sidebarHamburger.hamburgerOpen span:last-child {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Full-screen menu when open (both desktop and mobile) */
+.sidebarNav.menuOpen {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--color-base);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 0;
+  padding: 2rem;
+  transform: translateX(0);
+  z-index: 999;
+  overflow-y: auto;
+}
+
+.sidebarNav.menuOpen .sidebarNavItem {
+  writing-mode: horizontal-tb;
+  text-orientation: unset;
+  transform: none;
+  font-size: 1.5rem;
+  padding: 1.5rem 2.5rem;
+}
+
+.sidebarNav.menuOpen .sidebarNavItem .navNumber {
+  display: none;
+}
+
+.sidebarNav.menuOpen .sidebarNavItem .navTitle {
+  display: inline;
+}
+
+@media (max-width: 768px) {
+  .sidebarNav.menuOpen .sidebarNavItem {
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+  }
 }
 
 .sidebarNavItem {

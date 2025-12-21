@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import styles from "./Sidebar.module.css";
 
 export default function Sidebar() {
   const sidebarRef = useRef<HTMLElement>(null);
   const navContainerRef = useRef<HTMLDivElement>(null);
   const navItemsRef = useRef<Element[]>([]);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const sidebar = sidebarRef.current;
@@ -131,12 +133,22 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <nav className={styles.leftSidebar} ref={sidebarRef}>
-      <div className={styles.sidebarHamburger}>
-        <span></span>
-        <span></span>
-      </div>
-      <div className={styles.sidebarNav} ref={navContainerRef}>
+    <>
+      {isMenuOpen && (
+        <div 
+          className={styles.menuOverlay}
+          onClick={() => setIsMenuOpen(false)}
+        />
+      )}
+      <nav className={styles.leftSidebar} ref={sidebarRef}>
+        <div 
+          className={`${styles.sidebarHamburger} ${isMenuOpen ? styles.hamburgerOpen : ""}`}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          <span></span>
+          <span></span>
+        </div>
+        <div className={`${styles.sidebarNav} ${isMenuOpen ? styles.menuOpen : ""}`} ref={navContainerRef}>
         <a href="#hero" className={`${styles.sidebarNavItem} ${styles.active}`}>
           <span className={styles.navNumber}>I</span>
           <span className={styles.navTitle}>Home</span>
@@ -157,11 +169,16 @@ export default function Sidebar() {
           <span className={styles.navNumber}>V</span>
           <span className={styles.navTitle}>Topics</span>
         </a>
+        <Link href="/story" className={styles.sidebarNavItem}>
+          <span className={styles.navNumber}>VI</span>
+          <span className={styles.navTitle}>Our Story</span>
+        </Link>
       </div>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfWdtM2nb8phwIPIFMmwbT_zMzTErtuxOe9ZSV1WjjrGQk52A/viewform" target="_blank" rel="noopener noreferrer" className={styles.sidebarCta}>
-        Apply Now
-      </a>
-    </nav>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfWdtM2nb8phwIPIFMmwbT_zMzTErtuxOe9ZSV1WjjrGQk52A/viewform" target="_blank" rel="noopener noreferrer" className={styles.sidebarCta}>
+          Apply Now
+        </a>
+      </nav>
+    </>
   );
 }
 
