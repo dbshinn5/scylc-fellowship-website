@@ -708,6 +708,19 @@
   transform: translateX(4px);
 }
 
+.expandIndicator {
+  margin-left: 0.5rem;
+  font-size: 0.9em;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .bioLink::after {
+    display: none; /* Hide arrow on mobile when using expand indicator */
+  }
+}
+
 .bioImageCol {
   flex: 0 0 auto;
 }
@@ -1580,6 +1593,16 @@
 
 .overlayContent .bioImageCol {
   flex-shrink: 0;
+}
+
+.overlayContent .bioImageCol .polaroid {
+  max-width: 220px;
+}
+
+.overlayContent .bioImageCol .polaroid img {
+  width: 220px;
+  height: 275px;
+  object-fit: cover;
 }
 
 @media (max-width: 768px) {

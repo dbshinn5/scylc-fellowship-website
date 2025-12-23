@@ -837,7 +837,7 @@ export default function Home() {
                     Nalleli <span>Cobo</span>
                   </h2>
                   <p className={styles.bioTitle}>Founder & Co-Director</p>
-                  <p className={styles.bioText} ref={nalleliBioTextRef}>
+                  <div className={styles.bioText} ref={nalleliBioTextRef}>
                     {nalleliExpanded && isMobile ? (
                       <>
                         <p>
@@ -857,22 +857,29 @@ export default function Home() {
                         </p>
                       </>
                     ) : (
-                      "Nalleli Cobo is a South Los Angeles environmental justice activist who helped shut down a toxic urban oil-drilling site at age 19 and sparked major policy changes banning new oil extraction across the city and county. A Goldman Environmental Prize winner, she continues to lead movements against environmental racism and for community health."
+                      <p>Nalleli Cobo is a South Los Angeles environmental justice activist who helped shut down a toxic urban oil-drilling site at age 19 and sparked major policy changes banning new oil extraction across the city and county. A Goldman Environmental Prize winner, she continues to lead movements against environmental racism and for community health.</p>
                     )}
-                  </p>
+                  </div>
                   <a 
-                    href="#" 
+                    href="javascript:void(0)" 
                     className={styles.bioLink}
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       if (isMobile) {
                         setNalleliExpanded(!nalleliExpanded);
                       } else {
                         setShowNalleliOverlay(true);
                       }
+                      return false;
                     }}
                   >
                     About Nalleli
+                    {isMobile && (
+                      <span className={styles.expandIndicator}>
+                        {nalleliExpanded ? '▲' : '▼'}
+                      </span>
+                    )}
                   </a>
                 </div>
                 <div className={styles.bioImageCol}>
@@ -911,18 +918,25 @@ export default function Home() {
                     )}
                   </div>
                   <a 
-                    href="#" 
+                    href="javascript:void(0)" 
                     className={styles.bioLink}
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       if (isMobile) {
                         setMonicExpanded(!monicExpanded);
                       } else {
                         setShowMonicOverlay(true);
                       }
+                      return false;
                     }}
                   >
                     About Monic
+                    {isMobile && (
+                      <span className={styles.expandIndicator}>
+                        {monicExpanded ? '▲' : '▼'}
+                      </span>
+                    )}
                   </a>
                 </div>
                 <div className={styles.bioImageCol}>
